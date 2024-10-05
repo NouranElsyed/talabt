@@ -1,6 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Writers;
+using talabat.Core.Entities;
+using talabat.Core.RepositoriesContext;
+using talabat.Repository;
 using talabat.Repository.Data;
 
 namespace talabt
@@ -21,6 +24,12 @@ namespace talabt
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            //builder.Services.AddScoped<IGenericRepository<Products>, GenericRepository<Products>>();
+            //builder.Services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
+            //builder.Services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
+            builder.Services.AddScoped( typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+
             var app = builder.Build();
            using var scope = app.Services.CreateScope();
                 var services = scope.ServiceProvider;

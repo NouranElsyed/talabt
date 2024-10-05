@@ -12,12 +12,12 @@ namespace talabat.Repository.Data.Configurations
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Products> builder)
         {
-            builder.Property(P => P.Name).IsRequired().HasMaxLength(60);
+            builder.Property(P => P.Name).IsRequired().HasMaxLength(100);
             builder.Property(P => P.Description).IsRequired();
             builder.Property(P => P.PictureUrl).IsRequired();
             builder.Property(P => P.Price).HasColumnType("decimal(18,2)");
             builder.HasOne(P => P.Category).WithMany().HasForeignKey(P => P.CategoryId);
-            builder.HasOne(P => P.Brands).WithMany().HasForeignKey(P => P.BrandsId).HasConstraintName("BrandId"); ;
+            builder.HasOne(P => P.Brand).WithMany().HasForeignKey(P => P.BrandId).HasConstraintName("BrandId"); ;
 
         }
     }

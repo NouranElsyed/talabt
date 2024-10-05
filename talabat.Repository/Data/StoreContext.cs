@@ -19,7 +19,7 @@ namespace talabat.Repository.Data
         }
         public DbSet<Products> Products { get; set; }
         public DbSet<Category> Categoroies { get; set; }
-        public DbSet<Brands> Brands { get; set; }
+        public DbSet<Brand> Brands { get; set; }
 
     }
 }

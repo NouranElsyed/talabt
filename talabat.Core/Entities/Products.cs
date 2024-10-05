@@ -14,10 +14,10 @@ namespace talabat.Core.Entities
         public string PictureUrl { get; set; }
         public decimal Price { get; set; }
 
-        public int BrandsId { get; set; }
+        public int BrandId { get; set; }
 
         public int CategoryId { get; set; }
-        public Brands Brands { get; set; }
+        public Brand Brand { get; set; }
         public Category Category { get; set; }
 
 

@@ -9,10 +9,10 @@ using talabat.Core.Entities;
 
 namespace talabat.Repository.Data.Configurations
 {
-    internal class BrandConfigure  :    IEntityTypeConfiguration<Brands>
+    internal class BrandConfigure  :    IEntityTypeConfiguration<Brand>
     {
    
-            public void Configure(EntityTypeBuilder<Brands> builder)
+            public void Configure(EntityTypeBuilder<Brand> builder)
             {
                 builder.Property(B => B.Name).IsRequired();
             }

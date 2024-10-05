@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace talabat.Core.Entities
 {
-    public class Brands : BaseEntity
+    public class Brand : BaseEntity
     {
         public string Name { get; set; }
     }

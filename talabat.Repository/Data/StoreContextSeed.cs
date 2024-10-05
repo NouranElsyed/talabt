@@ -13,15 +13,15 @@ namespace talabat.Repository.Data
         public static async Task SeedAsync(StoreContext dbcontext)
         {
             var brandsData = File.ReadAllText("../talabat.Repository/Data/DataSeeding/brands.json");
-            var brands = JsonSerializer.Deserialize<List<Brands>>(brandsData);
+            var brands = JsonSerializer.Deserialize<List<Brand>>(brandsData);
             if (brands.Count() > 0)
             {
-                brands = brands.Select(b => new Brands() { Name = b.Name }).ToList();
+                brands = brands.Select(b => new Brand() { Name = b.Name }).ToList();
                 if (dbcontext.Brands.Count() == 0)
                 {
                     foreach (var brand in brands)
                     {
-                        dbcontext.Set<Brands>().Add(brand);
+                        dbcontext.Set<Brand>().Add(brand);
                     }
                     await dbcontext.SaveChangesAsync();
                 }
@@ -32,7 +32,7 @@ namespace talabat.Repository.Data
             if (categoroies.Count() > 0)
             {
                 categoroies = categoroies.Select(c => new Category() { Name = c.Name }).ToList();
-                if (!(dbcontext.Categoroies.Count() == 0))
+                if (dbcontext.Categoroies.Count() == 0)
                 {
                     foreach (var category in categoroies)
                     {
@@ -46,11 +46,12 @@ namespace talabat.Repository.Data
             var products = JsonSerializer.Deserialize<List<Products>>(ProductData);
             if (products.Count() > 0)
             {
-                products = products.Select(b => new Products() { Name = b.Name, Description = b.Description, PictureUrl = b.PictureUrl , BrandsId = b.BrandsId, CategoryId = b.CategoryId }).ToList();
-                if (!(dbcontext.Products.Count() > 0))
+           
+                if (dbcontext.Products.Count() == 0)
                 {
                     foreach (var Product in products)
                     {
+                        var brandId = Product.BrandId;
                         dbcontext.Set<Products>().Add(Product);
                     }
                     await dbcontext.SaveChangesAsync();
