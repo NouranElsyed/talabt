@@ -29,7 +29,7 @@ namespace talabt
             //builder.Services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
             //builder.Services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             builder.Services.AddScoped( typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddAutoMapper(M=>M.AddProfile(typeof(MappingProfiles)));
+            builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
             var app = builder.Build();
            using var scope = app.Services.CreateScope();
@@ -54,7 +54,7 @@ namespace talabt
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
