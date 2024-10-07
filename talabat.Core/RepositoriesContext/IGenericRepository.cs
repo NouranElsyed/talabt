@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using talabat.Core.Entities;
+using talabat.Core.Specifications;
 
 namespace talabat.Core.RepositoriesContext
 {
@@ -11,5 +12,8 @@ namespace talabat.Core.RepositoriesContext
     {
         Task<T> GetAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetWithSpecAsync(ISpecification<T> spec);
+        Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> spec);
+
     }
 }
