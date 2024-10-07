@@ -5,6 +5,7 @@ using talabat.Core.Entities;
 using talabat.Core.RepositoriesContext;
 using talabat.Repository;
 using talabat.Repository.Data;
+using talabt.Helper;
 
 namespace talabt
 {
@@ -28,7 +29,7 @@ namespace talabt
             //builder.Services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
             //builder.Services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             builder.Services.AddScoped( typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+            builder.Services.AddAutoMapper(M=>M.AddProfile(typeof(MappingProfiles)));
 
             var app = builder.Build();
            using var scope = app.Services.CreateScope();
