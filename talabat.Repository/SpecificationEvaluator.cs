@@ -18,6 +18,15 @@ namespace talabat.Repository
             {
                 query = query.Where(spec.Critria);
             }
+            if (spec.OrderBy is not null) 
+            {
+                query  = query.OrderBy(spec.OrderBy);
+            }
+            if (spec.OrderByDescending is not null)
+            {
+                query = query.OrderByDescending(spec.OrderBy);
+            }
+
             query = spec.Includes.Aggregate(query,(currentQuery,IncludeExpression)=>currentQuery.Include(IncludeExpression));
             return query;
         

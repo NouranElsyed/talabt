@@ -12,5 +12,8 @@ namespace talabat.Core.Specifications
     {
         public Expression<Func<T,bool>> Critria { get; set; }
         public List<Expression<Func<T,object>>> Includes { get; set; }
+        public Expression<Func<T, object>> OrderBy { get; set; }
+        public Expression<Func<T, object>> OrderByDescending { get; set; }
+
     }
 }

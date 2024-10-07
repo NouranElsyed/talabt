@@ -21,7 +21,7 @@ namespace talabt.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts([FromQuery] string? sort)
         {
             var spec = new ProductWithBrandAndCategorySpecifications();
             var Products = await _productRepo.GetAllWithSpecAsync(spec);

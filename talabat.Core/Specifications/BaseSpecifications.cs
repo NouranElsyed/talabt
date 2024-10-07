@@ -12,10 +12,20 @@ namespace talabat.Core.Specifications
     {
         public Expression<Func<T, bool>> Critria { get; set; }
         public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>();
+        public Expression<Func<T, object>> OrderBy { get; set; }
+        public Expression<Func<T, object>> OrderByDescending { get; set; }
         public BaseSpecifications() { }
         public BaseSpecifications(Expression<Func<T, bool>> critriaExpression) 
         {
             Critria = critriaExpression;
+        }
+        public void AddOrderBy(Expression<Func<T,object>> orderbyexpression)
+        {
+            OrderBy = orderbyexpression;
+        }
+        public void AddOrderByDescending(Expression<Func<T, object>> orderbydescendingexpression) 
+        {
+            OrderByDescending = orderbydescendingexpression;
         }
     }
 }
