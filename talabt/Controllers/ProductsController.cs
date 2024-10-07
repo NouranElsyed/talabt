@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using talabat.Core.Entities;
 using talabat.Core.RepositoriesContext;
+using talabat.Core.Specifications.ProductSpecifications;
 
 namespace talabt.Controllers
 {
@@ -18,13 +19,15 @@ namespace talabt.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Products>>> GetProducts()
         {
-            var Products = await _productRepo.GetAllAsync();
+            var spec = new ProductWithBrandAndCategorySpecifications();
+            var Products = await _productRepo.GetAllWithSpecAsync(spec);
             return Ok(Products);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Products>>> GetProduct(int id )
         {
-            var Product = await _productRepo.GetAsync(id);
+            var spec = new ProductWithBrandAndCategorySpecifications(id);
+            var Product = await _productRepo.GetWithSpecAsync(spec);
             if (Product==null) { return NotFound(new { messge="Not Found", statusCode=404}); }
             return Ok(Product);
         }
