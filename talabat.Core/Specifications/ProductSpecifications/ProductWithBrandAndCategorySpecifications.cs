@@ -9,7 +9,12 @@ namespace talabat.Core.Specifications.ProductSpecifications
 {
     public class ProductWithBrandAndCategorySpecifications:BaseSpecifications<Products>
     {
-        public ProductWithBrandAndCategorySpecifications(string sort):base()
+        public ProductWithBrandAndCategorySpecifications(string sort, int? BrandId, int? CategoryId) 
+            :base(P=>
+            (!BrandId.HasValue||P.BrandId==BrandId)
+            &&
+            (!CategoryId.HasValue || P.CategoryId == CategoryId)
+            )
         {
             Includes.Add(P=>P.Brand);
             Includes.Add(P => P.Category);

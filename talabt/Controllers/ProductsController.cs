@@ -21,14 +21,14 @@ namespace talabt.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts([FromQuery] string? sort)
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts([FromQuery] string? sort,int?BrandId,int?CategoryId)
         {
-            var spec = new ProductWithBrandAndCategorySpecifications();
+            var spec = new ProductWithBrandAndCategorySpecifications(sort, BrandId, CategoryId);
             var Products = await _productRepo.GetAllWithSpecAsync(spec);
             return Ok(_mapper.Map<IEnumerable<Products>,IEnumerable<ProductDTO>>(Products));
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductDTO>> GetProduct(int id )
+        public async Task<ActionResult<ProductDTO>> GetProduct(int id ) 
         {
             var spec = new ProductWithBrandAndCategorySpecifications(id);
             var Product = await _productRepo.GetWithSpecAsync(spec);
