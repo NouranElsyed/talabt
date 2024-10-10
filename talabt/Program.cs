@@ -7,6 +7,7 @@ using talabat.Core.RepositoriesContext;
 using talabat.Repository;
 using talabat.Repository.Data;
 using talabt.Error;
+using talabt.Extensions;
 using talabt.Helper;
 
 namespace talabt
@@ -30,19 +31,7 @@ namespace talabt
             //builder.Services.AddScoped<IGenericRepository<Products>, GenericRepository<Products>>();
             //builder.Services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
             //builder.Services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
-            builder.Services.AddScoped( typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddAutoMapper(typeof(MappingProfiles));
-            builder.Services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = (actionContext) =>
-                {
-                    var errors = actionContext.ModelState.Where(P=>P.Value.Errors.Count()>0)
-                    .SelectMany(P => P.Value.Errors)
-                    .Select(E=>E.ErrorMessage).ToArray();
-                    var Response = new ApiVaidationErrorResponse() { Errors=errors};
-                    return new BadRequestObjectResult(Response);
-                };
-            });
+            builder.Services.AddApplicationServices();
             var app = builder.Build();
            using var scope = app.Services.CreateScope();
                 var services = scope.ServiceProvider;
