@@ -23,9 +23,11 @@ namespace talabat.Core.Specifications.ProductSpecifications
                 switch (sort) 
                 {
                     case "PriceAsc":
+
                         AddOrderBy(P => P.Price);
-                    break;
+                        break;
                     case "PriceDesc":
+                    
                         AddOrderByDescending(P => P.Price);
                         break;
                     default:

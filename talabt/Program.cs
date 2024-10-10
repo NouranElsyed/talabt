@@ -1,10 +1,12 @@
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Writers;
 using talabat.Core.Entities;
 using talabat.Core.RepositoriesContext;
 using talabat.Repository;
 using talabat.Repository.Data;
+using talabt.Error;
 using talabt.Helper;
 
 namespace talabt
@@ -30,7 +32,17 @@ namespace talabt
             //builder.Services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             builder.Services.AddScoped( typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddAutoMapper(typeof(MappingProfiles));
-
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = (actionContext) =>
+                {
+                    var errors = actionContext.ModelState.Where(P=>P.Value.Errors.Count()>0)
+                    .SelectMany(P => P.Value.Errors)
+                    .Select(E=>E.ErrorMessage).ToArray();
+                    var Response = new ApiVaidationErrorResponse() { Errors=errors};
+                    return new BadRequestObjectResult(Response);
+                };
+            });
             var app = builder.Build();
            using var scope = app.Services.CreateScope();
                 var services = scope.ServiceProvider;
@@ -47,7 +59,7 @@ namespace talabt
                 var logger = loggerFactory.CreateLogger<Program>();
                 logger.LogError(ex,"an error occur during migration");
             }
-        
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

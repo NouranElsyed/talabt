@@ -24,7 +24,7 @@ namespace talabat.Repository
             }
             if (spec.OrderByDescending is not null)
             {
-                query = query.OrderByDescending(spec.OrderBy);
+                query = query.OrderByDescending(spec.OrderByDescending);
             }
 
             query = spec.Includes.Aggregate(query,(currentQuery,IncludeExpression)=>currentQuery.Include(IncludeExpression));
