@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "talabtApi", "talabt\talabtApi.csproj", "{E00A3523-B796-4F21-B276-30917A29D6E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "talabtAPIs", "talabt\talabtAPIs.csproj", "{E00A3523-B796-4F21-B276-30917A29D6E4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "talabat.Core", "talabat.Core\talabat.Core.csproj", "{FEF2BA5F-E399-4667-8E42-F7F9768C8454}"
 EndProject

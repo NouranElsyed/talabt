@@ -31,9 +31,9 @@ namespace talabt.Middlewares
                     
                     new ApiExceptionResponse(StatusCodes.Status500InternalServerError,ex.StackTrace.ToString(),ex.Message)
                     : new ApiExceptionResponse(StatusCodes.Status500InternalServerError);
+                var option = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
-
-                var json = JsonSerializer.Serialize(Response);        
+                var json = JsonSerializer.Serialize(Response,option);        
                 context.Response.WriteAsync(json);
             }
         }

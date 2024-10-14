@@ -1,15 +1,19 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Writers;
 using StackExchange.Redis;
 using talabat.Core.Entities;
+using talabat.Core.Entities.Identity;
 using talabat.Core.RepositoriesContext;
 using talabat.Repository;
 using talabat.Repository.Data;
+using talabat.Repository.Identity;
 using talabt.Error;
 using talabt.Extensions;
 using talabt.Helper;
+using talabtAPIs.Extensions;
 
 namespace talabt
 {
@@ -29,6 +33,10 @@ namespace talabt
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.AddDbContext<AppIdentityDbcontext>(option =>
+            {
+                option.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
+            });
             builder.Services.AddSingleton<IConnectionMultiplexer>(option => {
                 var connection = builder.Configuration.GetConnectionString("RedisConnection");
                 return ConnectionMultiplexer.Connect(connection);
@@ -37,15 +45,21 @@ namespace talabt
             //builder.Services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
             //builder.Services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             builder.Services.AddApplicationServices();
+            builder.Services.AddIdentityServices();
             var app = builder.Build();
            using var scope = app.Services.CreateScope();
                 var services = scope.ServiceProvider;
                 var _dbcontext = services.GetRequiredService<StoreContext>();
-                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+                var _Identitydbcontext = services.GetRequiredService<AppIdentityDbcontext>();
+            var UserManager = services.GetRequiredService <UserManager<AppUser>> ();
+            var loggerFactory = services.GetRequiredService<ILoggerFactory>();
             try
             {
                 await _dbcontext.Database.MigrateAsync();
                 await StoreContextSeed.SeedAsync(_dbcontext);
+                await _Identitydbcontext.Database.MigrateAsync();
+                await AppIdentityDbcontextSeed.SeedUserAsync(UserManager);
+
             }
             catch (Exception ex)
             {
