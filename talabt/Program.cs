@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Writers;
+using StackExchange.Redis;
 using talabat.Core.Entities;
 using talabat.Core.RepositoriesContext;
 using talabat.Repository;
@@ -27,6 +28,10 @@ namespace talabt
             builder.Services.AddDbContext<StoreContext>(option => 
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+            builder.Services.AddSingleton<IConnectionMultiplexer>(option => {
+                var connection = builder.Configuration.GetConnectionString("RedisConnection");
+                return ConnectionMultiplexer.Connect(connection);
             });
             //builder.Services.AddScoped<IGenericRepository<Products>, GenericRepository<Products>>();
             //builder.Services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();

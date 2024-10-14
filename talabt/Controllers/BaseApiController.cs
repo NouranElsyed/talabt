@@ -7,5 +7,6 @@ namespace talabt.Controllers
     [ApiController]
     public class BaseApiController : ControllerBase
     {
+
     }
 }
