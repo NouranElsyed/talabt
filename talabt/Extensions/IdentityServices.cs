@@ -17,4 +17,3 @@ namespace talabtAPIs.Extensions
         }
     }
 }
-s

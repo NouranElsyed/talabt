@@ -47,8 +47,8 @@ namespace talabt
             builder.Services.AddApplicationServices();
             builder.Services.AddIdentityServices();
             var app = builder.Build();
-           using var scope = app.Services.CreateScope();
-                var services = scope.ServiceProvider;
+           using var scope = app.Services.CreateScope();//Group of services lifeTime scoped
+                var services = scope.ServiceProvider;//services its Self
                 var _dbcontext = services.GetRequiredService<StoreContext>();
                 var _Identitydbcontext = services.GetRequiredService<AppIdentityDbcontext>();
             var UserManager = services.GetRequiredService <UserManager<AppUser>> ();
