@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using talabat.Core.Entities.Identity;
 using talabat.Core.ServicesContext;
 using talabt.Controllers;
 using talabt.Error;
 using talabtAPIs.DTOs;
+using talabtAPIs.Extensions;
 
 namespace talabtAPIs.Controllers
 {
@@ -15,14 +19,16 @@ namespace talabtAPIs.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
-        public AccountController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager,ITokenService tokenService)
+        public AccountController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager,ITokenService tokenService,IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _mapper = mapper;
         }
-   
+        #region  Register
         [HttpPost("Register")]
         public async Task<ActionResult<UserDTO>> Resgister(RegisterDTO model)
             {
@@ -46,7 +52,9 @@ namespace talabtAPIs.Controllers
             return Ok(ReturnedUser);
             }
 
+        #endregion
 
+        #region Login
         [HttpPost("Login")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO model)
         {
@@ -64,6 +72,35 @@ namespace talabtAPIs.Controllers
                 };
             return Ok(ReturnedUser);
         }
-        
+        #endregion
+
+        #region GetCurrentUser
+        [Authorize]
+        [HttpGet("GetCurrentUser")]
+        public async Task<ActionResult<UserDTO>> GetCurrentUser()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var user = await _userManager.FindByEmailAsync(email);
+            var ReturnedUser = new UserDTO()
+            {
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                Token = await _tokenService.CreateTokenAsync(user, _userManager)
+            };
+            return Ok(ReturnedUser);
+        }
+        #endregion
+        #region GetCurrentUser
+        [Authorize]
+        [HttpGet("Address")]
+        public async Task<ActionResult<AddressDTO>> GetAddressOfCurrentUser()
+        {
+            var user = await _userManager.FindUserByAddressAsync(User);
+            var MappedAddress = _mapper.Map<Address,AddressDTO>(user?.Address);
+            return Ok(MappedAddress);
+        }
+        #endregion
+
+
     }
 }

@@ -41,11 +41,9 @@ namespace talabt
                 var connection = builder.Configuration.GetConnectionString("RedisConnection");
                 return ConnectionMultiplexer.Connect(connection);
             });
-            //builder.Services.AddScoped<IGenericRepository<Products>, GenericRepository<Products>>();
-            //builder.Services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
-            //builder.Services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
+     
             builder.Services.AddApplicationServices();
-            builder.Services.AddIdentityServices();
+            builder.Services.AddIdentityServices(builder.Configuration);
             var app = builder.Build();
            using var scope = app.Services.CreateScope();//Group of services lifeTime scoped
                 var services = scope.ServiceProvider;//services its Self
@@ -76,12 +74,9 @@ namespace talabt
             }
             app.UseStaticFiles();
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }
