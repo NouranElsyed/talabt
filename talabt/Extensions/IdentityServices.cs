@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using System.Runtime.CompilerServices;
 using talabat.Core.Entities.Identity;
+using talabat.Core.ServicesContext;
 using talabat.Repository.Identity;
+using talabat.Services.Services.Token;
 
 namespace talabtAPIs.Extensions
 {
@@ -11,8 +14,8 @@ namespace talabtAPIs.Extensions
         {
             Services.AddIdentity<AppUser, IdentityRole>()
                     .AddEntityFrameworkStores<AppIdentityDbcontext>();
-            Services.AddAuthentication();
-
+            Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+            Services.AddScoped<ITokenService,TokenService>();
             return  Services;
         }
     }

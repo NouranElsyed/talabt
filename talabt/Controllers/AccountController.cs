@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using talabat.Core.Entities.Identity;
+using talabat.Core.ServicesContext;
 using talabt.Controllers;
 using talabt.Error;
 using talabtAPIs.DTOs;
@@ -13,11 +14,13 @@ namespace talabtAPIs.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager,ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenService = tokenService;
         }
    
         [HttpPost("Register")]
@@ -33,12 +36,12 @@ namespace talabtAPIs.Controllers
             };
             var Result = await _userManager.CreateAsync(user,model.Password);
             if (!Result.Succeeded) return BadRequest(new ApiErrorResponse(400));
-            var ReturnedUser = new UserDTO() 
+            var ReturnedUser = new UserDTO()
             {
-            DisplayName = user.DisplayName,
-            Email = user.Email,
-            Token = "ThisWillBeToken"
-            
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                Token = await _tokenService.CreateTokenAsync(user, _userManager)
+
             };
             return Ok(ReturnedUser);
             }
@@ -61,5 +64,6 @@ namespace talabtAPIs.Controllers
                 };
             return Ok(ReturnedUser);
         }
+        
     }
 }
