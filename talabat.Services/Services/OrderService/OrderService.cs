@@ -26,7 +26,7 @@ namespace talabat.Services.Services.OrderService
     
             _unitOfWork = unitOfWork;
         }
-        public async Task<Order> CreateOrderAsync(string BuyerEmail, string BasketId, int DeliveryMethodID, Address ShippingAddress)
+        public async Task<Order?> CreateOrderAsync(string BuyerEmail, string BasketId, int DeliveryMethodID, Address ShippingAddress)
         {
             //1.Get Basket From Basket Repo
             var basket = await _basketRepository.GetBasketAsync(BasketId);
@@ -57,9 +57,11 @@ namespace talabat.Services.Services.OrderService
             return order;
         }
 
-        public Task<Core.Entities.Order_Aggregate.Order> GetOrderByIdForSpecificUserAsync(string BuyerEmail, int OrderId)
+        public async Task<Core.Entities.Order_Aggregate.Order?> GetOrderByIdForSpecificUserAsync(string BuyerEmail, int OrderId)
         {
-            throw new NotImplementedException();
+            var Spec = new OrderSpecification(BuyerEmail,OrderId);
+            var order = await _unitOfWork.Repository<Core.Entities.Order_Aggregate.Order>().GetWithSpecAsync(Spec);
+            return order;
         }
 
         public async Task<IReadOnlyList<Core.Entities.Order_Aggregate.Order>> GetOrdersForSpecificUserAsync(string BuyerEmail)
