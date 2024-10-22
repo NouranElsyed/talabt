@@ -51,6 +51,18 @@ namespace talabtAPIs.Controllers
             if (Orders is null) return NotFound(new ApiErrorResponse(404, "There is no Orders for this User"));
             return Ok(Orders);
         }
+        [ProducesResponseType(typeof(IReadOnlyList<Order>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
+        [Authorize]
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<Order>> GetOrderByIdForUser(int id) 
+        {
+            var BuyerEmail = User.FindFirstValue(ClaimTypes.Email);
+            var Order = await _orderService.GetOrderByIdForSpecificUserAsync(BuyerEmail, id);
+            if (Order is null) return NotFound(new ApiErrorResponse(404, $"There is no order with {id} for this User"));
+            return Ok(Order);
+
+        }
 
     }
 }
