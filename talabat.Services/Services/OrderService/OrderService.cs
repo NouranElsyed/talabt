@@ -10,6 +10,7 @@ using talabat.Core.Entities;
 using talabat.Core.Entities.Order_Aggregate;
 using talabat.Core.RepositoriesContext;
 using talabat.Core.ServicesContext;
+using talabat.Core.Specifications.OrderSpecifications;
 
 namespace talabat.Services.Services.OrderService
 {
@@ -65,5 +66,12 @@ namespace talabat.Services.Services.OrderService
         {
             throw new NotImplementedException();
         }
+        public async Task<Order> GetOrderByIdForSpecificUserAsync(string BuyerEmail)
+        {
+            var Spec = new OrderSpecification(BuyerEmail);
+            var Orders = await _unitOfWork.Repository<Order>().GetWithSpecAsync(Spec);
+            return Orders;
+        }
+       
     }
 }

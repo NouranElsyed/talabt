@@ -40,12 +40,7 @@ namespace talabtAPIs.Controllers
             return Ok(order);
 
         }
-        public async Task<Order> GetOrderByIdForSpecificUserAsync(string BuyerEmail) 
-        {
-            var Spec = new OrderSpecification(BuyerEmail);
-            var Orders = await _unitOfWork.Repository<Order>().GetWithSpecAsync(Spec);
-            return Orders;
-        }
+      
 
     }
 }
