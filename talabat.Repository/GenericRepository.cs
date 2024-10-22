@@ -18,11 +18,12 @@ namespace talabat.Repository
         {
             _dbcontext = dbcontext;
         }
-        public async Task<IEnumerable<T>> GetAllAsync()
+        
+        public async Task<IReadOnlyList<T>> GetAllAsync()
         {
             if (typeof(T) == typeof(Products)) 
             {
-                return (IEnumerable<T>)await _dbcontext.Set<Products>().Include(P=>P.Brand).Include(P => P.Category).ToListAsync();
+                return (IReadOnlyList<T>)await _dbcontext.Set<Products>().Include(P=>P.Brand).Include(P => P.Category).ToListAsync();
             }
            return await _dbcontext.Set<T>().ToListAsync();
         }
@@ -37,7 +38,7 @@ namespace talabat.Repository
         {
             return SpecificationEvaluator<T>.GetQuery(_dbcontext.Set<T>(), spec);
         }
-        public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> spec)
+        public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> spec)
         {
             return await ApplySpecifications(spec).ToListAsync();
         }
@@ -52,5 +53,7 @@ namespace talabat.Repository
         public async Task AddAsync(T item)=> await _dbcontext.Set<T>().AddAsync(item);
         public void Update(T item) => _dbcontext.Set<T>().Update(item);
         public void Delete(T item)=> _dbcontext.Set<T>().Remove(item);
+
+     
     }
 }

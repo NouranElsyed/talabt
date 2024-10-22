@@ -62,16 +62,13 @@ namespace talabat.Services.Services.OrderService
             throw new NotImplementedException();
         }
 
-        public Task<IReadOnlyList<Core.Entities.Order_Aggregate.Order>> GetOrdersForSpecificUserAsync(string BuyerEmail)
-        {
-            throw new NotImplementedException();
-        }
-        public async Task<Order> GetOrderByIdForSpecificUserAsync(string BuyerEmail)
+        public async Task<IReadOnlyList<Core.Entities.Order_Aggregate.Order>> GetOrdersForSpecificUserAsync(string BuyerEmail)
         {
             var Spec = new OrderSpecification(BuyerEmail);
-            var Orders = await _unitOfWork.Repository<Order>().GetWithSpecAsync(Spec);
+            var Orders = await _unitOfWork.Repository<Order>().GetAllWithSpecAsync(Spec);
             return Orders;
         }
+       
        
     }
 }
