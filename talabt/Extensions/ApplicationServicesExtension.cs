@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using talabat.Core;
 using talabat.Core.RepositoriesContext;
+using talabat.Core.ServicesContext;
 using talabat.Repository;
+using talabat.Services.Services.OrderService;
 using talabt.Error;
 using talabt.Helper;
 
@@ -26,6 +28,7 @@ namespace talabt.Extensions
                 };
             });
             Services.AddScoped<IUnitOfWork,UnitOfWork>();
+            Services.AddScoped<IOrderService, OrderService>();
             return Services;
         }
     }
