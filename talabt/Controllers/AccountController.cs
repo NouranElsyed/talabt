@@ -32,6 +32,10 @@ namespace talabtAPIs.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult<UserDTO>> Resgister(RegisterDTO model)
             {
+            if (CheckEmailExists(model.Email).Result.Value) 
+            {
+                return BadRequest(new ApiErrorResponse(400,"this Email is Already Exist."));
+            }
             var user = new AppUser()
             {
                 DisplayName = model.DisplayName,
@@ -74,7 +78,7 @@ namespace talabtAPIs.Controllers
         }
         #endregion
 
-        #region GetCurrentUser
+        #region Get Current User
         [Authorize]
         [HttpGet("GetCurrentUser")]
         public async Task<ActionResult<UserDTO>> GetCurrentUser()
@@ -90,7 +94,8 @@ namespace talabtAPIs.Controllers
             return Ok(ReturnedUser);
         }
         #endregion
-        #region GetCurrentUser
+
+        #region Get Address of Current User
         [Authorize]
         [HttpGet("Address")]
         public async Task<ActionResult<AddressDTO>> GetAddressOfCurrentUser()
@@ -101,6 +106,29 @@ namespace talabtAPIs.Controllers
         }
         #endregion
 
+        #region Update Address of Current User
+        [Authorize]
+        [HttpPost("Address")]
+        public async Task<ActionResult<AddressDTO>> UpdateAddressofCurrentUser(AddressDTO UpdatedAddress)
+        {
+            var user = await _userManager.FindUserByAddressAsync(User);
+            var MappedAddress = _mapper.Map<AddressDTO, Address>(UpdatedAddress);
+            MappedAddress.Id = user.Address.Id;
+            user.Address =MappedAddress;
+            var Result = await _userManager.UpdateAsync(user);
+            if(!Result.Succeeded) return BadRequest(new ApiErrorResponse(400));
+            return Ok(MappedAddress);   
+        }
+        #endregion
+
+        #region Validate Dublicate Email at Registeration
+        [Authorize]
+        [HttpPost("EmailExists")]
+        public async Task<ActionResult<bool>> CheckEmailExists(string email)
+        {
+            return await _userManager.FindByEmailAsync(email) is not null;
+        }
+        #endregion
 
     }
 }

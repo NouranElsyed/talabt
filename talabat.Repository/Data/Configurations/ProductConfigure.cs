@@ -8,7 +8,7 @@ using talabat.Core.Entities;
 
 namespace talabat.Repository.Data.Configurations
 {
-    internal class ProductConfigure : IEntityTypeConfiguration<Products>
+    public class ProductConfigure : IEntityTypeConfiguration<Products>
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Products> builder)
         {

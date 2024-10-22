@@ -29,6 +29,9 @@ namespace talabt
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+              
+
+
             builder.Services.AddDbContext<StoreContext>(option => 
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -37,20 +40,32 @@ namespace talabt
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));
             });
+
             builder.Services.AddSingleton<IConnectionMultiplexer>(option => {
                 var connection = builder.Configuration.GetConnectionString("RedisConnection");
                 return ConnectionMultiplexer.Connect(connection);
             });
      
+
+
+
             builder.Services.AddApplicationServices();
+
             builder.Services.AddIdentityServices(builder.Configuration);
+
+
+
             var app = builder.Build();
+
+
            using var scope = app.Services.CreateScope();//Group of services lifeTime scoped
                 var services = scope.ServiceProvider;//services its Self
                 var _dbcontext = services.GetRequiredService<StoreContext>();
                 var _Identitydbcontext = services.GetRequiredService<AppIdentityDbcontext>();
             var UserManager = services.GetRequiredService <UserManager<AppUser>> ();
             var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+
+
             try
             {
                 await _dbcontext.Database.MigrateAsync();

@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using talabat.Core.Entities.Identity;
+using talabat.Core.Entities.Order_Aggregate;
 using talabat.Core.ServicesContext;
 
 namespace talabat.Services.Services.Token
@@ -20,6 +21,7 @@ namespace talabat.Services.Services.Token
         public TokenService(IConfiguration configuration)
         {
             this.configuration = configuration;
+           
         }
         public async Task<string> CreateTokenAsync(AppUser user, UserManager<AppUser> userManager)
         {

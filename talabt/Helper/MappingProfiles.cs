@@ -18,6 +18,8 @@ namespace talabt.Helper
                 .ForMember(P => P.Category, O => O.MapFrom(S => S.Category.Name))
                 .ForMember(P => P.PictureUrl, O => O.MapFrom<ProductPictureUrlResolver>()).ReverseMap();
             CreateMap<Address, AddressDTO>().ReverseMap();
+            CreateMap<CustomerBasketDTO, CustomerBasket>().ReverseMap();
+            CreateMap<BasketItemDTO, BasketItem>().ReverseMap();
         }
     }
 }

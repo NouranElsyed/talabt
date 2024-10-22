@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using talabat.Core;
 using talabat.Core.RepositoriesContext;
 using talabat.Repository;
 using talabt.Error;
@@ -24,6 +25,7 @@ namespace talabt.Extensions
                     return new BadRequestObjectResult(Response);
                 };
             });
+            Services.AddScoped<IUnitOfWork,UnitOfWork>();
             return Services;
         }
     }
