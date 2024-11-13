@@ -63,7 +63,7 @@ namespace talabtAPIs.Controllers
         public async Task<ActionResult<UserDTO>> Login(LoginDTO model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user is null) return Unauthorized(new ApiErrorResponse(400));
+            if (user is null) return Unauthorized(new ApiErrorResponse(401));
              var Result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (!Result.Succeeded) return Unauthorized(new ApiErrorResponse(401)); 
                
@@ -71,7 +71,7 @@ namespace talabtAPIs.Controllers
                     {
                     DisplayName=user.DisplayName,
                     Email=user.Email,
-                    Token = "ThisWillBeToken"
+                    Token = await _tokenService.CreateTokenAsync(user, _userManager)
 
                 };
             return Ok(ReturnedUser);

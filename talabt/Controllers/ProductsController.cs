@@ -22,7 +22,7 @@ namespace talabt.Controllers
             _productRepo = productRepo;
             _mapper = mapper;
         }
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts([FromQuery]ProductSpecParams param)
         {

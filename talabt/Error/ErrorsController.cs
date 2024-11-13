@@ -9,7 +9,7 @@ namespace talabt.Error
     {
         public IActionResult Error(int code)
         {
-            return NotFound(new ApiErrorResponse(StatusCodes.Status404NotFound,"Not found end point !"));  
+            return NotFound(new ApiErrorResponse(StatusCodes.Status404NotFound,$"{code}"));  
         }
     }
 }

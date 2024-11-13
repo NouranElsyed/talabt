@@ -17,7 +17,7 @@ namespace talabat.Repository.Data.Configurations
                 .HasConversion(OStatus => OStatus.ToString(),
                 OStatus => (OrderStatus)Enum.Parse(typeof(OrderStatus), OStatus));
             builder.Property(O => O.SubTotal).HasColumnType("decimal(18,2)");
-            builder.OwnsOne(O => O.ShippingAddress, X => X.WithOwner());
+            builder.OwnsOne(O => O.ShippingAddress, shippingAddress => shippingAddress.WithOwner());
             builder.HasOne(O =>O.DeliveryMethod).WithMany().OnDelete(DeleteBehavior.NoAction);
  
         }

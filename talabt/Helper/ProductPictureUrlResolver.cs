@@ -16,7 +16,7 @@ namespace talabt.Helper
         {
             if (!string.IsNullOrEmpty(source.PictureUrl))
             {
-                return $"{_configuration["ApiBaseUrl"]}/{source.PictureUrl}";
+                return $"{_configuration["ApiBaseUrl"]}{source.PictureUrl}";
             }
             return string.Empty;
         }
