@@ -19,12 +19,14 @@ namespace talabat.Services.Services.OrderService
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPaymentService _paymentService;
 
-        public OrderService(IBasketRepository basketRepository,IUnitOfWork unitOfWork)
+        public OrderService(IBasketRepository basketRepository,IUnitOfWork unitOfWork,IPaymentService paymentService)
         {
             _basketRepository = basketRepository;
     
             _unitOfWork = unitOfWork;
+            _paymentService = paymentService;
         }
         public async Task<Order?> CreateOrderAsync(string BuyerEmail, string BasketId, int DeliveryMethodID, Address ShippingAddress)
         {
@@ -48,7 +50,14 @@ namespace talabat.Services.Services.OrderService
             //4.Get Delivery Method From DeliveryMethod Repo
             var deliveryMethod =  await _unitOfWork.Repository<DeliveryMethod>().GetAsync(DeliveryMethodID);
             //5.Create Order
-            var order = new Order(BuyerEmail, ShippingAddress, deliveryMethod, OrderItems, subtotal);
+            var spec = new OrderWithPaymentIntentId(basket.PaymentIntentId);
+            var ExOrder = await _unitOfWork.Repository<Order>().GetWithSpecAsync(spec);
+            if (ExOrder is not null) 
+            {
+                _unitOfWork.Repository<Order>().Delete(ExOrder);
+               await _paymentService.CreateOrUpdatePaymentIntent(BasketId);
+            }
+            var order = new Order(BuyerEmail, ShippingAddress, deliveryMethod, OrderItems, subtotal,basket.PaymentIntentId);
             //6.Add Order Locally
             await _unitOfWork.Repository<Order>().AddAsync(order);
             //7.Save Order To Database[ToDo]
