@@ -39,7 +39,7 @@ namespace talabtAPIs.Controllers
         public async Task<ActionResult<OrderToReturnDto>> CreateOrder(OrderDTO orderDto) 
         {
             var buyeremail = User.FindFirstValue(ClaimTypes.Email);
-            var MappedAddress = _mapper.Map<AddressDTO,Address>(orderDto.shippingAddress);
+            var MappedAddress = _mapper.Map<AddressDTO,Address>(orderDto.shipToAddress);
             var Order = await _orderService.CreateOrderAsync(buyeremail, orderDto.basketId, orderDto.deliveryMethodId, MappedAddress);
             if (Order is null) return BadRequest(new ApiErrorResponse(404,"Can not create "));
             var MappedOrder = _mapper.Map<Order,OrderToReturnDto>(Order); 

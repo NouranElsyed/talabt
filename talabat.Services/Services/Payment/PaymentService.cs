@@ -11,6 +11,7 @@ using talabat.Core.Entities;
 using talabat.Core.Entities.Order_Aggregate;
 using talabat.Core.RepositoriesContext;
 using talabat.Core.ServicesContext;
+using talabat.Core.Specifications.OrderSpecifications;
 
 namespace talabat.Services.Services.Payment
 {
@@ -26,6 +27,8 @@ namespace talabat.Services.Services.Payment
             _configuration = configuration;
             _unitOfWork = unitOfWork;
         }
+
+      
         public async Task<CustomerBasket> CreateOrUpdatePaymentIntent(string BasketId)
         {
             StripeConfiguration.ApiKey = _configuration["StripeSettings:Secretkey"];
@@ -84,5 +87,20 @@ namespace talabat.Services.Services.Payment
             return Basket;
              
         }
+
+        public async Task<Order> ChangeOrderStatus(string paymentInentId, bool flag)
+        {
+            var spec = new OrderWithPaymentIntentId(paymentInentId);
+            var order = await _unitOfWork.Repository<Order>().GetWithSpecAsync(spec);
+            order.Status = flag ? OrderStatus.PaymentReceived : OrderStatus.PaymentFailed;
+
+            _unitOfWork.Repository<Order>().Update(order);
+            await _unitOfWork.CompleteAsync(); // Ensure changes are saved
+            Console.WriteLine($"Order status updated successfully: {order.Status}");
+         
+            return order;
+
+        }
+
     }
 }

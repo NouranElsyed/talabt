@@ -10,7 +10,7 @@ namespace talabtAPIs.DTOs
         [Required]
         public int deliveryMethodId { get; set; }
         [Required]
-        public AddressDTO shippingAddress { get; set; }
+        public AddressDTO shipToAddress { get; set; }
 
 
     }

@@ -54,7 +54,16 @@ namespace talabt
             builder.Services.AddApplicationServices();
 
             builder.Services.AddIdentityServices(builder.Configuration);
+            builder.Services.AddCors(Options => 
+            {
+                Options.AddPolicy("MyPolicy", options =>
+                {
+                    options.AllowAnyHeader();
+                    options.AllowAnyMethod();
+                    options.WithOrigins("http://localhost:4200");
 
+                });
+            });
 
 
             var app = builder.Build();
@@ -89,8 +98,9 @@ namespace talabt
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseStaticFiles();
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseCors("MyPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
