@@ -10,6 +10,7 @@ using talabat.Core.RepositoriesContext;
 using talabat.Core.Specifications.ProductSpecifications;
 using talabt.DTOs;
 using talabtAPIs.DTOs;
+using talabtAPIs.Helper;
 
 namespace talabt.Controllers
 {
@@ -25,7 +26,8 @@ namespace talabt.Controllers
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        //[Authorize]
+
+        [Cached(300)]
         [HttpGet]
         public async Task<ActionResult<ProductsToBeReturnDto>> GetProducts([FromQuery]ProductSpecParams param)
         {

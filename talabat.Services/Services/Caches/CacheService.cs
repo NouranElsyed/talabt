@@ -18,11 +18,11 @@ namespace talabat.Services.Services.Caches
             _database = redis.GetDatabase();
     
         }
-        public async Task<string> GetCacheKeyAsync(string key)
+        public async Task<string?> GetCacheKeyAsync(string key)
         {
             var cacheResponse = await _database.StringGetAsync(key);
             if (cacheResponse.IsNullOrEmpty) return null;
-            return cacheResponse.ToString();
+            return cacheResponse;
         }
 
         public async Task SetCacheKeyAsync(string key, object response, TimeSpan expiretime)

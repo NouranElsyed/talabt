@@ -3,6 +3,7 @@ using talabat.Core;
 using talabat.Core.RepositoriesContext;
 using talabat.Core.ServicesContext;
 using talabat.Repository;
+using talabat.Services.Services.Caches;
 using talabat.Services.Services.OrderService;
 using talabat.Services.Services.Payment;
 using talabt.Error;
@@ -31,6 +32,7 @@ namespace talabt.Extensions
             Services.AddScoped<IUnitOfWork,UnitOfWork>();
             Services.AddScoped<IOrderService, OrderService>();
             Services.AddScoped<IPaymentService,PaymentService>();
+            Services.AddSingleton<ICacheService,CacheService>();
             return Services;
         }
     }
