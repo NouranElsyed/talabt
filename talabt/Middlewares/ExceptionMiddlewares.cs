@@ -27,10 +27,8 @@ namespace talabt.Middlewares
                 _logger.LogError(ex, ex.Message);
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                var Response =_env.IsDevelopment()?
-                    
-                    new ApiExceptionResponse(StatusCodes.Status500InternalServerError,ex.StackTrace.ToString(),ex.Message)
-                    : new ApiExceptionResponse(StatusCodes.Status500InternalServerError);
+                var Response =_env.IsDevelopment()? new ApiExceptionResponse(StatusCodes.Status500InternalServerError,ex.StackTrace.ToString(),ex.Message)
+                    : new ApiExceptionResponse(StatusCodes.Status500InternalServerError, ex.StackTrace.ToString(), ex.Message);
                 var option = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
                 var json = JsonSerializer.Serialize(Response,option);        

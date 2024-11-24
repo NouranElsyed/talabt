@@ -13,6 +13,7 @@ using talabat.Repository.Identity;
 using talabt.Error;
 using talabt.Extensions;
 using talabt.Helper;
+using talabt.Middlewares;
 using talabtAPIs.Extensions;
 
 namespace talabt
@@ -91,13 +92,15 @@ namespace talabt
                 var logger = loggerFactory.CreateLogger<Program>();
                 logger.LogError(ex,"an error occur during migration");
             }
-            app.UseStatusCodePagesWithReExecute("/error/{0}");
+            app.UseMiddleware<ExceptionMiddlewares>();
+
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+            //if (app.Environment.IsDevelopment())
+            //{
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            //}
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCors("MyPolicy");
